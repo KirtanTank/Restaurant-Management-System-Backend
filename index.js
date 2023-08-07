@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const cors = require('cors');
 
@@ -38,6 +37,27 @@ app.get('', (req, res) => {
     })
 })
 
+// Get users
+app.get('/users', (req, res) => {
+    pool.getConnection((err, connection) => {
+        if(err){
+            console.log(err);
+        }
+        connection.query('select * from users', (err, rows) => {
+            connection.release();
+
+            if(!err){
+                res.send(rows);
+            }
+            else{
+                res.status(400).send(err);
+            }
+        })
+        
+    })
+})
+
+
 // DELETE by ID request
 app.delete('/:id', (req, res) => {
     pool.getConnection((err, connection) => {
@@ -64,9 +84,9 @@ app.post('/addRestaurant', (req, res) => {
         if(err){
             console.log(err);
         }
-        const {name, address, contact} = req.body;
+        const {name, address, contact, added_by} = req.body;
 
-        connection.query('insert into restaurants (name, address, contact) values (?, ?, ?)', [name, address, contact], (err, rows) => {
+        connection.query('insert into restaurants (name, address, contact, added_by) values (?, ?, ?, ?)', [name, address, contact, added_by], (err, rows) => {
             connection.release();
 
             if(!err){
