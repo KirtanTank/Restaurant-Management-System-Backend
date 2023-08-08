@@ -127,9 +127,9 @@ app.put('/:id', (req, res) => {
             console.log(err);
         }
         const {id} = req.params;
-        const {name, address, contact} = req.body;
+        const {name, address, contact, added_by} = req.body;
 
-        connection.query('update restaurants set name = ?, address = ?,  contact = ? where id = ?', [name, address, contact, id], (err, rows) => {
+        connection.query('update restaurants set name = ?, address = ?,  contact = ?, added_by = ? where id = ?', [name, address, contact, added_by, id], (err, rows) => {
             connection.release();
 
             if(!err){
