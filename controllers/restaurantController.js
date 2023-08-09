@@ -2,6 +2,7 @@ const db = require('../models')
 
 // create main Model
 const Restaurant = db.restaurants
+const User = db.users
 
 
 // main work
@@ -29,7 +30,11 @@ const addRestaurant = async (req, res) => {
 
 const getAllRestaurants = async (req, res) => {
 
-    let restaurants = await Restaurant.findAll({})
+    let restaurants = await Restaurant.findAll({
+        include: [
+            { model: User, as: 'user', attributes: ['id', 'name'] }
+          ]
+    })
     res.status(200).send(restaurants)
 
 }
@@ -39,7 +44,12 @@ const getAllRestaurants = async (req, res) => {
 const getOneRestaurant = async (req, res) => {
 
     let id = req.params.id
-    let restaurant = await Restaurant.findOne({ where: { id: id }})
+    let restaurant = await Restaurant.findOne({ 
+        where: { id: id },
+        include: [
+            { model: User, as: 'user', attributes: ['id','name'] }
+        ]
+    })
     res.status(200).send(restaurant)
 
 }

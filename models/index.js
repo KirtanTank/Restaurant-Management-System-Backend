@@ -48,15 +48,17 @@ db.sequelize.sync({ force: false })
 
 // // 1 to Many Relation
 
-// db.products.hasMany(db.reviews, {
-//     foreignKey: 'product_id',
-//     as: 'review'
-// })
+db.users.hasMany(db.restaurants, {
+    foreignKey: 'added_by',
+    as: 'restaurant'
+})
 
 // db.reviews.belongsTo(db.products, {
 //     foreignKey: 'product_id',
 //     as: 'product'
 // })
+
+db.restaurants.belongsTo(db.users, { foreignKey: 'added_by', as: 'user' });
 
 
 module.exports = db
